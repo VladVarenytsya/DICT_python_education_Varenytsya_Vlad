@@ -1,4 +1,4 @@
-def Hi():
+def hi():
     print("Hello! My name is DICT_Bot.")
     print("I was created in 2021.")
     print('Please, remind me your name.')
@@ -6,7 +6,7 @@ def Hi():
     print('What a great name you have, ' +name+'!')
 
 
-def Age():
+def age():
     print('Let me guess your age.')
     print('Enter remainders of dividing your age by 3, 5 and 7.')
     remainder3 = int(input())
@@ -16,7 +16,7 @@ def Age():
     print('Your age is '+str(age)+"; that's a good time to start programming!")
 
 
-def Quest():
+def quest():
     print('Now I will prove to you that I can count to any number you want.')
     for k in range(int(input())+1):
         print(str(k) + '!')
@@ -35,6 +35,6 @@ def Quest():
         else:
             print("Please, try again.")
 
-Hi()
-Age()
-Quest()
+hi()
+age()
+quest()
