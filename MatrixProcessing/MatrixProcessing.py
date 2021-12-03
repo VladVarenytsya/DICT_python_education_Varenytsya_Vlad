@@ -19,7 +19,7 @@ def matrs():
 
 
 def matr():
-    global m_1, n_1, b, e, d
+    global m_1, n_1, b
     print('Enter size of matrix: ')
     m_1, n_1 = input().split(' ')
     print('Enter matrix:')
@@ -38,7 +38,7 @@ def res_s():
     global b
     print('The result is:')
     for i in range(int(m_1)):
-        print(' '.join(map(str, (b[i]))))
+        print(' '.join(map(str, b[i])))
     b = []
 
 
@@ -151,8 +151,22 @@ def transpose_matrix():
         print('The operation cannot be performed.')
 
 
+def minor(l, i, j):
+    return [k[:j] + k[j + 1:] for k in (l[:i] + l[i + 1:])]
+
+
+def determinant(l):
+    if len(l) == 2:
+        return l[0][0] * l[1][1] - l[0][1] * l[1][0]
+    dete = 0
+    for i in range(len(l)):
+        dete += ((-1) ** i) * l[0][i] * determinant(minor(l, 0, i))
+    return dete
+
+
 while answer != 0:
-    print('1.Add matrices\n2.Multiply matrix by a constant\n3.Multiply matrices\n4.Transpose matrix\n0.Exit\nYour choice:')
+    print('1.Add matrices\n2.Multiply matrix by a constant\n3.Multiply matrices')
+    print('4.Transpose matrix\n5.Calculate a determinant\n0.Exit\nYour choice:')
     answer = int(input())
     if answer == 0:
         break
@@ -164,3 +178,6 @@ while answer != 0:
         multiply_matrix()
     elif answer == 4:
         transpose_matrix()
+    elif answer == 5:
+        matr()
+        print('The result is:\n' + str(determinant(b)))
