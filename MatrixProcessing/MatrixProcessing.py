@@ -1,5 +1,5 @@
 from math import ceil
-m_1 = m_2 = n_1 = n_2 = s = 0
+m_1 = m_2 = n_1 = n_2 = s = cons = 0
 b = c = []
 d = []
 e = []
@@ -10,10 +10,14 @@ def matrs():
     global m_1, m_2, n_1, n_2, b, c
     print('Enter size of first matrix: ')
     m_1, n_1 = input().split(' ')
+    m_1 = int(m_1)
+    n_1 = int(n_1)
     print('Enter first matrix:')
     b = [[int(k) for k in input().split(' ')] for _ in range(int(m_1))]
     print('Enter size of second matrix: ')
     m_2, n_2 = input().split(' ')
+    m_2 = int(m_1)
+    n_2 = int(n_2)
     print('Enter second matrix:')       
     c = [[int(k) for k in input().split(' ')] for _ in range(int(m_2))]
 
@@ -22,14 +26,16 @@ def matr():
     global m_1, n_1, b
     print('Enter size of matrix: ')
     m_1, n_1 = input().split(' ')
+    m_1 = int(m_1)
+    n_1 = int(n_1)
     print('Enter matrix:')
-    b = [[int(k) for k in input().split(' ')] for _ in range(int(m_1))]
+    b = [[int(k) for k in input().split(' ')] for _ in range(m_1)]
 
 
 def res():
     global d
     print('The result is:')
-    for i in range(int(m_1)):
+    for i in range(m_1):
         print(' '.join(map(str, d[i])))
     d = []
 
@@ -37,7 +43,7 @@ def res():
 def res_s():
     global b
     print('The result is:')
-    for i in range(int(m_1)):
+    for i in range(m_1):
         print(' '.join(map(str, b[i])))
     b = []
 
@@ -47,8 +53,8 @@ def sum():
     matrs()
     if m_1 == m_2:
         if n_1 == n_2:
-            for i in range(int(m_1)):
-                for j in range(int(n_1)):
+            for i in range(m_1):
+                for j in range(n_1):
                     e.append(b[i][j] + c[i][j])
                 d.append(e)
                 e = []
@@ -59,20 +65,14 @@ def sum():
         print("The operation cannot be performed.")
 
 
-def multiply_const():
-    global m_1, n_1, b, e, d
-    print('Enter size of matrix: ')
-    m_1, n_1 = input().split(' ')
-    print('Enter matrix:')
-    b = [[float(k) for k in input().split(' ')] for _ in range(int(m_1))]
-    print('Enter constant: ')
-    cons = float(input())
-    for i in range(int(m_1)):
-        for j in range(int(n_1)):
-            e.append(b[i][j] * cons)
+def multiply_const(bdf):
+    global e, d, cons
+    for i in range(m_1):
+        for j in range(n_1):
+            e.append(round(bdf[i][j] * cons, 2))
         d.append(e)
         e = []
-    res()
+    return d
 
 
 def multiply_matrix():
@@ -95,7 +95,7 @@ def multiply_matrix():
 def t_matrix_hor():
     global m_1, n_1, b
     matr()
-    l = int(m_1) - 1
+    l = m_1 - 1
     f = ceil(l / 2)
     for i in range(f):
         for j in range(l+1):
@@ -106,7 +106,7 @@ def t_matrix_hor():
 def t_matrix_vert():
     global m_1, n_1, b
     matr()
-    l = int(m_1) - 1
+    l = m_1 - 1
     f = ceil(l / 2)
     for i in range(l+1):
         for j in range(f):
@@ -114,21 +114,19 @@ def t_matrix_vert():
     res_s()
 
 
-def t_matrix_main():
-    global m_1, n_1, b
-    matr()
-    l = int(m_1)
-    for i in range(l):
-        for j in range(l):
+def t_matrix_main(bld):
+    global m_1, n_1
+    for i in range(m_1):
+        for j in range(m_1):
             if i > j:
-                b[i][j], b[j][i] = b[j][i], b[i][j]
-    res_s()
+                bld[i][j], bld[j][i] = bld[j][i], bld[i][j]
+    return bld
 
 
 def t_matrix_side():
     global m_1, n_1, b
     matr()
-    l = int(m_1) - 1
+    l = m_1 - 1
     for i in range(l+1):
         for j in range(l+1):
             if i > l - j:
@@ -140,7 +138,8 @@ def transpose_matrix():
     print('1.Main diagonal\n2.Side diagonal\n3.Vertical line\n4.Horizontal line\nYour choice: ')
     choice = int(input())
     if choice == 1:
-        t_matrix_main()
+        matr()
+        t_matrix_main(b)
     elif choice == 2:
         t_matrix_side()
     elif choice == 3:
@@ -155,29 +154,60 @@ def minor(l, i, j):
     return [k[:j] + k[j + 1:] for k in (l[:i] + l[i + 1:])]
 
 
-def determinant(l):
+def determinant(l, i):
     if len(l) == 2:
         return l[0][0] * l[1][1] - l[0][1] * l[1][0]
     dete = 0
-    for i in range(len(l)):
-        dete += ((-1) ** i) * l[0][i] * determinant(minor(l, 0, i))
+    for j in range(len(l)):
+        dete += ((-1) ** j) * l[i][j] * determinant(minor(l, i, j), i)
     return dete
+
+
+def invite():
+    global cons, d
+    for i in range(m_1):
+        for j in range(n_1):
+            jet = minor(b, i, j)
+            if i+j % 2 == 0:
+                b_1[i][j] = jet[0][0] * jet[1][1] - jet[0][1] * jet[1][0]
+            else:
+                b_1[i][j] = -(jet[0][0] * jet[1][1] - jet[0][1] * jet[1][0])
+    try:
+        cons = 1 / determinant(b, 0)
+        cad = multiply_const(t_matrix_main(b_1))
+        for z in range(m_1):
+            print(' '.join(map(str, cad[z])))
+    except ZeroDivisionError:
+        print("This matrix doesn't have an inverse.")
 
 
 while answer != 0:
     print('1.Add matrices\n2.Multiply matrix by a constant\n3.Multiply matrices')
-    print('4.Transpose matrix\n5.Calculate a determinant\n0.Exit\nYour choice:')
+    print('4.Transpose matrix\n5.Calculate a determinant\n6.Inverse matrix\n0.Exit\nYour choice:')
     answer = int(input())
     if answer == 0:
         break
     elif answer == 1:
         sum()
     elif answer == 2:
-        multiply_const()
+        print('Enter size of matrix: ')
+        m_1, n_1 = input().split(' ')
+        print('Enter matrix:')
+        b = [[float(k) for k in input().split(' ')] for _ in range(int(m_1))]
+        print('Enter constant: ')
+        cons = float(input())
+        multiply_const(b)
     elif answer == 3:
         multiply_matrix()
     elif answer == 4:
         transpose_matrix()
     elif answer == 5:
         matr()
-        print('The result is:\n' + str(determinant(b)))
+        print('The result is:\n' + str(determinant(b, 0)))
+    elif answer == 6:
+        matr()
+        b_1 = [['_' for k in range(m_1)] for v in range(n_1)]
+        print('The result is:')
+        invite()
+        print()
+
