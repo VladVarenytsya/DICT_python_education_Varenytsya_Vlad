@@ -13,13 +13,13 @@ def matrs():
     m_1 = int(m_1)
     n_1 = int(n_1)
     print('Enter first matrix:')
-    b = [[int(k) for k in input().split(' ')] for _ in range(int(m_1))]
+    b = [[float(k) for k in input().split(' ')] for _ in range(int(m_1))]
     print('Enter size of second matrix: ')
     m_2, n_2 = input().split(' ')
     m_2 = int(m_1)
     n_2 = int(n_2)
     print('Enter second matrix:')       
-    c = [[int(k) for k in input().split(' ')] for _ in range(int(m_2))]
+    c = [[float(k) for k in input().split(' ')] for _ in range(int(m_2))]
 
 
 def matr():
@@ -150,30 +150,29 @@ def transpose_matrix():
         print('The operation cannot be performed.')
 
 
-def minor(l, i, j):
-    return [k[:j] + k[j + 1:] for k in (l[:i] + l[i + 1:])]
+def minor(l, i_1, j_1):
+    return [k[:j_1] + k[j_1 + 1:] for k in (l[:i_1] + l[i_1 + 1:])]
 
 
-def determinant(l, i):
+def determinant(l):
     if len(l) == 2:
         return l[0][0] * l[1][1] - l[0][1] * l[1][0]
     dete = 0
     for j in range(len(l)):
-        dete += ((-1) ** j) * l[i][j] * determinant(minor(l, i, j), i)
+        dete += ((-1) ** j) * l[0][j] * determinant(minor(l, 0, j))
     return dete
 
 
-def invite():
+def invite(k):
     global cons, d
     for i in range(m_1):
         for j in range(n_1):
-            jet = minor(b, i, j)
             if i+j % 2 == 0:
-                b_1[i][j] = jet[0][0] * jet[1][1] - jet[0][1] * jet[1][0]
+                b_1[i][j] = determinant(minor(k, i, j))
             else:
-                b_1[i][j] = -(jet[0][0] * jet[1][1] - jet[0][1] * jet[1][0])
+                b_1[i][j] = -(determinant(minor(k, i, j)))
     try:
-        cons = 1 / determinant(b, 0)
+        cons = 1 / determinant(k)
         cad = multiply_const(t_matrix_main(b_1))
         for z in range(m_1):
             print(' '.join(map(str, cad[z])))
@@ -182,6 +181,7 @@ def invite():
 
 
 while answer != 0:
+
     print('1.Add matrices\n2.Multiply matrix by a constant\n3.Multiply matrices')
     print('4.Transpose matrix\n5.Calculate a determinant\n6.Inverse matrix\n0.Exit\nYour choice:')
     answer = int(input())
@@ -203,11 +203,10 @@ while answer != 0:
         transpose_matrix()
     elif answer == 5:
         matr()
-        print('The result is:\n' + str(determinant(b, 0)))
+        print('The result is:\n' + str(determinant(b)))
     elif answer == 6:
         matr()
         b_1 = [['_' for k in range(m_1)] for v in range(n_1)]
         print('The result is:')
-        invite()
+        invite(b)
         print()
-
