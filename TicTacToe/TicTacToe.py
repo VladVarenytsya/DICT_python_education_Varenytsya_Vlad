@@ -3,15 +3,17 @@ limit = str('_' * 9)
 l_1 = ['|', a[0], a[1], a[2], '|']
 l_2 = ['|', a[3], a[4], a[5], '|']
 l_3 = ['|', a[6], a[7], a[8], '|']
-dig = [int(i) for i in range(1,4)]
 s_l = [' ', l_1, l_2, l_3, ' ']
+dig = [int(i) for i in range(1,4)]
 answer_1 = 0
 answer_2 = 0
 i = 0
+cont_play = 2
+res = []
 
 
 def wins():
-    res = []
+    global res
     if a.count("X") - a.count("O") >= 2:
         return "Impossible"
     elif a.count("O") - a.count("X") >= 2:
@@ -40,10 +42,26 @@ def wins():
         return res[0] + ' wins'
     elif '_' not in a:
         if len(res) == 0:
+            res = []
             return "Draw"
     elif '_' in a:
         if len(res) == 0:
             return "Game not finished"
+
+
+def contin():
+    global cont_play, a, i, res, l_1, l_2, l_3, s_l
+    print('Play again?\n1.No\n2.Yes')
+    cont_play = int(input())
+    a = list('_' * 9)
+    l_1 = ['|', a[0], a[1], a[2], '|']
+    l_2 = ['|', a[3], a[4], a[5], '|']
+    l_3 = ['|', a[6], a[7], a[8], '|']
+    s_l = [' ', l_1, l_2, l_3, ' ']
+    res = []
+    i = 0
+    if cont_play == 2:
+        square()
 
 
 def square():
@@ -99,5 +117,8 @@ def move():
 
 
 square()
-while wins() == "Game not finished":
-    move()
+while cont_play == 2:
+    if wins() == "Game not finished":
+        move()
+    else:
+        contin()
