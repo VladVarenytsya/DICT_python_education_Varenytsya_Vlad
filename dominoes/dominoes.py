@@ -4,7 +4,7 @@ com_pie = []
 pla_pie = []
 res = []
 snake = []
-status = 0 
+status = 0
 r_pie = 0
 
 
@@ -54,12 +54,26 @@ def arc():
         status = 'computer'
 
 
+def fenshui():
+    for i in range(1, len(pla_pie)+1):
+        print(str(i) + ':', end='')
+        print(pla_pie[i-1])
+
+
 def result():
-    print(res)
-    print(com_pie)
-    print(pla_pie)
-    print(snake)
-    print(status)
+    print(70 * '=')
+    print('Stock size: ' + str(len(res)))
+    print('Computer pieces: ' + str(len(com_pie)) + '\n')
+    for i in snake:
+        print(i, end='')
+    print('\n')
+    print('Your pieces: ')
+    fenshui()
+    print('')
+    if status == 'computer':
+        print('Status: Computer is about to make a move. Press Enter to continue...')
+    elif status == 'player':
+        print("Status: It's your turn to make a move. Enter your command.")
 
 
 def cho():
@@ -74,3 +88,5 @@ def cho():
 
 
 cho()
+
+
