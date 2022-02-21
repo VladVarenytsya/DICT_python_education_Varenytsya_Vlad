@@ -8,6 +8,9 @@ status = 0
 r_pie = 0
 pla_in = 0
 dra = []
+snake_2 = []
+sn_up = 0
+sn_down = 0
 
 
 def he_ha():
@@ -74,7 +77,7 @@ def snake_v():
                 print(snake[i], end='...')
             elif i > 2:
                 print(snake[i-6], end='')
-        
+
 
 def f_res():
     if status == 'computer':
@@ -89,12 +92,59 @@ def f_res():
         print("Status: The game is over. The computer won!")
 
 
+def true_snake():
+    global sn_down, sn_up
+    snake_2.clear()
+    for i in snake:
+        snake_2.append(i[0])
+        snake_2.append(i[1])
+    sn_up = snake_2[0]
+    sn_down = snake_2[-1]
+
+
 def com_step():
     global r_pie, status
     r_pie = choice(com_pie)
     snake.append(r_pie)
     com_pie.remove(r_pie)
     status = 'player'
+
+
+def play_in_up():
+    global r_pie, status, sn_up, pla_in
+    true_snake()
+    pla_in = abs(pla_in)
+    r_pie = pla_pie[pla_in - 1]
+    if sn_up in r_pie:
+        if sn_up == r_pie[1]:
+            snake.insert(0, r_pie)
+            pla_pie.remove(r_pie)
+            status = 'computer'
+        else:
+            r_pie.reverse()
+            snake.insert(0, r_pie)
+            pla_pie.remove(r_pie)
+            status = 'computer'
+    else:
+        print('Illegal move. Please try again. a')
+
+
+def play_in_down():
+    global r_pie, status, sn_down
+    true_snake()
+    r_pie = pla_pie[pla_in - 1]
+    if sn_down in r_pie:
+        if sn_down == r_pie[0]:
+            snake.append(r_pie)
+            pla_pie.remove(r_pie)
+            status = 'computer'
+        else:
+            r_pie.reverse()
+            snake.append(r_pie)
+            pla_pie.remove(r_pie)
+            status = 'computer'
+    else:
+        print('Illegal move. Please try again. b')
 
 
 def pla_step():
@@ -105,23 +155,16 @@ def pla_step():
         res.remove(r_pie)
         status = 'computer'
     elif pla_in > 0:
-        r_pie = pla_pie[pla_in-1]
-        snake.append(r_pie)
-        pla_pie.remove(r_pie)
-        status = 'computer'
+        play_in_down()
     elif pla_in < 0:
-        pla_in = abs(pla_in)
-        r_pie = pla_pie[pla_in - 1]
-        snake.insert(0, r_pie)
-        pla_pie.remove(r_pie)
-        status = 'computer'
+        play_in_up()
 
 
 def draw():
     global status, dra
     for i in snake:
-        for j in range(2):
-            dra.append(i[j])
+        dra.append(i[0])
+        dra.append(i[1])
         for k in range(7):
             if dra.count(k) == 8:
                 if dra[0] == dra[-1] == k:
@@ -178,4 +221,3 @@ while True:
             result()
     elif status != 'computer' or 'player':
         break
-
