@@ -5,12 +5,17 @@ pla_pie = []
 res = []
 snake = []
 status = 0
-r_pie = 0
+r_pie = []
 pla_in = 0
 dra = []
 snake_2 = []
 sn_up = 0
 sn_down = 0
+comp_d = {i: 0 for i in range(7)}
+comp_d_2 = []
+com_status = 2
+com_pie_2 = []
+comp_cont = 'no'
 
 
 def he_ha():
@@ -102,12 +107,72 @@ def true_snake():
     sn_down = snake_2[-1]
 
 
+def comp_ch():
+    global com_pie_2, comp_d
+    true_snake()
+    comp_d = {i: 0 for i in range(7)}
+    for k in com_pie:
+        comp_d_2.append(k[0])
+        comp_d_2.append(k[1])
+    for i in range(7):
+        comp_d[i] = snake_2.count(i) + comp_d_2.count(i)
+    comp_d_2.clear()
+    com_pie_2 = com_pie.copy()
+
+
+def comp_ch_2():
+    global com_pie_2, r_pie
+    if len(comp_d_2) == 0:
+        for k in com_pie_2:
+            sat = comp_d.get(k[0]) + comp_d.get(k[1])
+            comp_d_2.append(sat)
+    for i in com_pie_2:
+        sat = comp_d.get(i[0]) + comp_d.get(i[1])
+        if sat == max(comp_d_2):
+            comp_d_2.remove(sat)
+            com_pie_2.remove(i)
+            r_pie = i
+            break
+
+
+def comp_ch_3():
+    global com_status, comp_cont
+    if sn_up in r_pie:
+        if r_pie[1] == sn_up:
+            com_status = -1
+            comp_cont = 'yes'
+        else:
+            r_pie.reverse()
+            com_status = -1
+            comp_cont = 'yes'
+    elif sn_down in r_pie:
+        if r_pie[0] == sn_down:
+            com_status = 1
+            comp_cont = 'yes'
+        else:
+            r_pie.reverse()
+            com_status = 1
+            comp_cont = 'yes'
+    else:
+        if len(comp_d_2) == 1:
+            com_status = 0
+            comp_cont = 'yes'
+
+
 def com_step():
     global r_pie, status
-    r_pie = choice(com_pie)
-    snake.append(r_pie)
-    com_pie.remove(r_pie)
-    status = 'player'
+    comp_ch_3()
+    if com_status == 1:
+        snake.append(r_pie)
+        com_pie.remove(r_pie)
+        status = 'player'
+    elif com_status == -1:
+        snake.insert(0, r_pie)
+        com_pie.remove(r_pie)
+        status = 'player'
+    elif com_status == 0:
+        com_pie.append(choice(res))
+        status = 'player'
 
 
 def play_in_up():
@@ -126,7 +191,7 @@ def play_in_up():
             pla_pie.remove(r_pie)
             status = 'computer'
     else:
-        print('Illegal move. Please try again. a')
+        print('Illegal move. Please try again.')
 
 
 def play_in_down():
@@ -144,7 +209,7 @@ def play_in_down():
             pla_pie.remove(r_pie)
             status = 'computer'
     else:
-        print('Illegal move. Please try again. b')
+        print('Illegal move. Please try again.')
 
 
 def pla_step():
@@ -209,10 +274,19 @@ cho()
 while True:
     pla_in = input()
     if status == 'computer':
+        comp_ch()
+        while comp_cont == 'no':
+            comp_ch_2()
+            comp_ch_3()
         com_step()
         result()
+        comp_cont = 'no'
     elif status == 'player':
-        pla_in = int(pla_in)
+        try:
+            pla_in = int(pla_in)
+        except ValueError:
+            print('Invalid input. Please try again.')
+            continue
         if pla_in not in range(-len(pla_pie), len(pla_pie) + 1):
             print('Invalid input. Please try again.')
             continue
