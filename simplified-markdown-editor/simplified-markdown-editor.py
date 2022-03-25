@@ -50,18 +50,40 @@ def link():
 
 
 def inline_code():
-    global inp
-    inp = 'inline-code'
+    global text_2
+    text_2 += '\n' + '~' + str(input('Enter your code: > ')) + '~' + '\n'
 
 
 def ordered_list():
-    global inp
-    inp = 'ordered-list'
+    global text_2
+    try:
+        nof = int(input('Number of rows: > '))
+        if nof > 0:
+            for i in range(1, nof + 1):
+                row = str(input('Row #' + str(i) + ': > '))
+                text_2 += str(i) + '. ' + row + '\n'
+        else:
+            print('The number of rows should be greater than zero')
+            ordered_list()
+    except ValueError:
+        print('The number of rows should be greater than zero')
+        ordered_list()
 
 
 def unordered_list():
-    global inp
-    inp = 'unordered-list'
+    global text_2
+    try:
+        nof = int(input('Number of rows: > '))
+        if nof > 0:
+            for i in range(1, nof + 1):
+                row = str(input('Row #' + str(i) + ': > '))
+                text_2 += '* ' + row + '\n'
+        else:
+            print('The number of rows should be greater than zero')
+            unordered_list()
+    except ValueError:
+        print('The number of rows should be greater than zero')
+        unordered_list()
 
 
 def new_line():
@@ -69,9 +91,16 @@ def new_line():
     text_2 += '\n'
 
 
+def space():
+    global text_2
+    text_2 += ' '
+
+
 def all_func():
     global inp
-    if inp == 'plain':
+    if inp == '':
+        space()
+    elif inp == 'plain':
         plain()
     elif inp == 'bold':
         bold()
@@ -101,11 +130,9 @@ while inp != '!done':
         break
     else:
         all_func()
+        print(text_2)
         # text_3 = open('text.txt', 'a')
         # text_3.write(text_2)
         # text_3.close()
-        # text_3 = open('text.txt')
-        # for i in text_3:
-        #     print(i)
-        # text_3.close()
-        print(text_2)
+
+
