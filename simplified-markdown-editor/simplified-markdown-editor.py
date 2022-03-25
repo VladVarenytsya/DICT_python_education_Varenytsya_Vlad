@@ -131,8 +131,8 @@ while inp != '!done':
     else:
         all_func()
         print(text_2)
-        # text_3 = open('text.txt', 'a')
-        # text_3.write(text_2)
-        # text_3.close()
+text_3 = open('output.md', 'w')
+text_3.write(text_2)
+text_3.close()
 
 
